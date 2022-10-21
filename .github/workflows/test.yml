@@ -1,0 +1,24 @@
+name: Test
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.19.x
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install Go tip & test
+        shell: bash
+        run: |
+          go install golang.org/dl/gotip@latest
+          gotip download
+          gotip version
+          gotip test --count=1 -race -coverprofile=/tmp/code-coverage.out ./...
+      
